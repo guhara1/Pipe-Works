@@ -805,7 +805,7 @@ export function allRegionPaths(): string[][] {
 //   false(기본): 읍·면·동은 손으로 쓴 고유 콘텐츠가 있을 때만 index (도어웨이 안전)
 //   true        : 읍·면·동까지 전부 index — 수천 페이지가 자동 생성 본문으로 색인되어
 //                 구글 도어웨이/저품질 페이지 패널티 위험이 큼 (비권장)
-export const INDEX_EUPMYEONDONG = false;
+export const INDEX_EUPMYEONDONG = true;
 
 // 색인 가능 여부
 //  - 명시값(indexable)이 있으면 우선
