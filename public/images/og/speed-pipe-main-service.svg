@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a1424"/>
+      <stop offset="1" stop-color="#13233b"/>
+    </linearGradient>
+    <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff6a13"/>
+      <stop offset="1" stop-color="#2f93d8"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect x="80" y="250" width="96" height="96" rx="20" fill="url(#mark)"/>
+  <text x="200" y="320" font-family="Pretendard, sans-serif" font-size="64" font-weight="800" fill="#f4f1ec">스피드 배관공사</text>
+  <text x="80" y="430" font-family="Pretendard, sans-serif" font-size="40" font-weight="700" fill="#9fb1c6">전국 하수구막힘·배관공사 긴급출동</text>
+  <text x="80" y="490" font-family="Pretendard, sans-serif" font-size="28" fill="#9fb1c6">싱크대·변기·욕실 배수구·오수관·배관내시경·고압세척</text>
+</svg>
