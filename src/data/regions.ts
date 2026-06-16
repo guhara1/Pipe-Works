@@ -801,11 +801,14 @@ export function allRegionPaths(): string[][] {
   return out;
 }
 
-// 색인 가능 여부: 명시값 > sido는 기본 true > 그 외는 content 유무
+// 색인 가능 여부 (스펙: 시·도 → 시·군·구 핵심 index, 읍·면·동은 사례 쌓인 곳만)
+//  - 명시값(indexable)이 있으면 우선
+//  - 시·도 / 시·군·구 / 구 → 핵심 색인 레이어(true)
+//  - 읍·면·동 → 손으로 쓴 고유 콘텐츠(content)가 있을 때만 index, 아니면 noindex
 export function isIndexable(node: RegionNode): boolean {
   if (typeof node.indexable === "boolean") return node.indexable;
-  if (node.level === "sido") return true;
-  return !!node.content;
+  if (node.level === "eupmyeondong") return !!node.content;
+  return true;
 }
 
 export const sidoList = regions;

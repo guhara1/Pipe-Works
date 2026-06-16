@@ -6,8 +6,10 @@ import {
   ancestorsOfPath,
   findByPath,
   isIndexable,
+  regions,
   type RegionNode,
 } from "@/data/regions";
+import { generateAreaContent } from "@/data/areaContentGen";
 import { site } from "@/data/site";
 import { featuredServiceSlugs, getService } from "@/data/services";
 import { cases } from "@/data/cases";
@@ -66,7 +68,14 @@ export default async function AreaPage({ params }: { params: Promise<{ path: str
   const chain = ancestorsOfPath(path);
   const url = `/area/${path.join("/")}/`;
   const indexable = isIndexable(node);
-  const c = node.content;
+
+  // 손으로 쓴 고유 콘텐츠가 있으면 우선, 없으면 지역별 자동 생성 콘텐츠 사용
+  const parentPath = path.slice(0, -1);
+  const parent = parentPath.length ? findByPath(parentPath) : null;
+  const siblings = parent ? parent.children ?? [] : regions;
+  const sidoName = chain[0]?.name ?? node.name;
+  const c = node.content ?? generateAreaContent(node, parentPath, siblings, sidoName);
+
   const isHub = !!(node.children && node.children.length);
   const basePath = path.join("/");
 
@@ -302,13 +311,6 @@ export default async function AreaPage({ params }: { params: Promise<{ path: str
                   <p className="muted">{c!.nearby!.join(" · ")} 등 인접 지역도 출동이 가능합니다.</p>
                 )}
               </section>
-            )}
-
-            {/* 콘텐츠가 없는 placeholder */}
-            {!c && (
-              <p className="muted">
-                {node.name} 지역의 하수구막힘·싱크대·변기·욕실 배수구 막힘, 오수관 역류, 배관내시경·고압세척 상담이 가능합니다. 증상과 현장 사진을 보내주시면 원인과 작업 방식, 비용 기준을 안내드립니다.
-              </p>
             )}
 
             {/* 11) FAQ */}
