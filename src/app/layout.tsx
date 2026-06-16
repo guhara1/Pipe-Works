@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MobileBottomCTA from "@/components/MobileBottomCTA";
+import AdPopup from "@/components/AdPopup";
 import JsonLd from "@/components/JsonLd";
 import { site } from "@/data/site";
 import { organizationJsonLd, websiteJsonLd } from "@/lib/seo";
@@ -39,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main>{children}</main>
         <Footer />
         <MobileBottomCTA />
+        <AdPopup />
       </body>
     </html>
   );
