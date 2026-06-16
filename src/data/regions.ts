@@ -801,14 +801,18 @@ export function allRegionPaths(): string[][] {
   return out;
 }
 
-// 색인 가능 여부 (스펙: 시·도 → 시·군·구 핵심 index, 읍·면·동은 사례 쌓인 곳만)
+// 색인 가능 여부 — 도어웨이 회피를 위한 보수적 정책
 //  - 명시값(indexable)이 있으면 우선
-//  - 시·도 / 시·군·구 / 구 → 핵심 색인 레이어(true)
-//  - 읍·면·동 → 손으로 쓴 고유 콘텐츠(content)가 있을 때만 index, 아니면 noindex
+//  - 시·도 → index (실제 하위 시·군·구를 묶는 진짜 허브)
+//  - 시·군·구 / 구 / 읍·면·동 → "손으로 쓴 고유 콘텐츠(content)"가 있을 때만 index
+//    (자동 생성 콘텐츠만 있는 페이지는 noindex — 페이지는 존재하되 색인 제외)
+//
+// 즉, 자동 생성으로 전국 구조는 채우되 색인은 강남구처럼 실제 콘텐츠가
+// 준비된 지역부터 단계적으로 연다. 운영 중 node.content 를 채우면 자동 index.
 export function isIndexable(node: RegionNode): boolean {
   if (typeof node.indexable === "boolean") return node.indexable;
-  if (node.level === "eupmyeondong") return !!node.content;
-  return true;
+  if (node.level === "sido") return true;
+  return !!node.content;
 }
 
 export const sidoList = regions;
