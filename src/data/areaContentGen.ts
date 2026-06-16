@@ -91,6 +91,8 @@ const TAIL: string[] = [
   "스피드 배관공사는 {name} 현장의 건물 유형과 사용 환경을 먼저 확인한 뒤, 단순 막힘인지 반복 막힘인지 배관 내부 문제인지에 따라 필요한 장비와 작업 방향을 안내합니다. 작업 후에는 배수 테스트로 흐름을 확인하고 재발 방지 방법을 함께 안내합니다.",
   "{name}에서는 무리하게 작업부터 시작하지 않고 증상과 위치를 먼저 확인합니다. 필요한 경우에만 고압세척·배관내시경을 사용하며, 야간·주말 긴급출동과 음식점·상가 영업장 시간대 조율도 가능합니다.",
   "스피드 배관공사는 {name} 상담 시 증상과 현장 사진을 먼저 확인해 원인을 추정하고, 작업 전에 비용 기준을 안내합니다. 추가 작업이 필요하면 진행 전에 다시 설명한 뒤 동의를 받고 진행합니다.",
+  "{name} 현장은 가정집·상가·음식점·영업장에 따라 막힘 원인과 작업 방식이 달라, 스프링·석션·고압세척·배관내시경 중 상황에 맞는 장비만 선택해 사용합니다. 과장된 작업을 권하지 않고 꼭 필요한 범위만 진행합니다.",
+  "{name}에서 같은 자리가 반복해서 막힌다면 단순 이물질이 아니라 기름·퇴적물 적체나 배관 노후·구배 문제일 수 있습니다. 이런 경우 배관내시경으로 내부를 확인한 뒤 세척·보수 방향을 정하는 것이 비용상으로도 유리합니다.",
 ];
 
 const PROBLEM_BY_TYPE: Record<RegionType, string[]> = {
@@ -150,6 +152,19 @@ const FAQ_VARIANTS: { q: string; a: string }[][] = [
   ],
 ];
 
+// 비용 안내·준비사항도 변형 (전 페이지 동일 보일러플레이트 방지)
+const COSTNOTE_VARIANTS: string[] = [
+  "{name} 배관공사 비용은 현장 구조와 막힘 정도를 확인한 뒤 안내됩니다. 단순 막힘인지, 반복 막힘인지, 배관 내부 문제인지에 따라 필요한 장비와 작업 시간이 달라질 수 있습니다.",
+  "{name}의 비용은 막힘 위치와 배관 길이·노후도, 사용 장비, 영업장 여부에 따라 달라집니다. 작업 전에 예상 기준을 설명하고, 추가 작업이 필요하면 진행 전에 다시 안내한 뒤 동의를 받고 진행합니다.",
+  "{name} 작업 비용은 단정하지 않고 현장 조건에 따라 안내합니다. 스프링으로 끝나는 단순 막힘과 고압세척·내시경이 필요한 경우, 배관 교체가 필요한 경우의 기준이 다르며 모두 작업 전에 설명드립니다.",
+];
+
+const PREP_VARIANTS: string[] = [
+  "상담이 더 정확하려면 {name}의 막힘 증상과 발생 위치(싱크대·욕실·변기·바닥 등), 건물 형태, 물이 내려가는 속도, 냄새 여부를 알려주시면 좋습니다. 가능하면 증상 부위 사진 1~3장을 함께 보내주세요.",
+  "{name} 출동 전, 어디서부터 막혔는지(한 곳인지 여러 곳인지)와 건물 종류·층, 영업장 여부, 작업 가능 시간대를 알려주시면 필요한 장비를 미리 준비할 수 있어 작업이 빨라집니다.",
+  "{name}에서 상담 시 증상 사진과 발생 위치, 반복 여부를 알려주시면 원인을 더 정확히 추정할 수 있습니다. 영업장은 차량 접근·주차와 그리스트랩 위치를 미리 확인해 주시면 도움이 됩니다.",
+];
+
 const SYMPTOMS = [
   "물이 평소보다 천천히 빠지는 경우",
   "배수구에서 하수 냄새가 올라오는 경우",
@@ -174,7 +189,8 @@ const COST_FACTORS = [
 
 export function generateAreaContent(node: RegionNode, parentPath: string[], siblings: RegionNode[], sidoName: string): AreaContent {
   const t = regionType(node);
-  const n = seed(node.slug);
+  // 전체 경로로 시드 → 같은 슬러그(남구·북구 등)가 도시별로 다른 변형을 받음(도어웨이 회피)
+  const n = seed([...parentPath, node.slug].join("/"));
   const topic = node.name + topicParticle(node.name);
   const fill = (s: string) =>
     s.replaceAll("{topic}", topic).replaceAll("{name}", node.name).replaceAll("{sido}", sidoName);
@@ -187,7 +203,7 @@ export function generateAreaContent(node: RegionNode, parentPath: string[], sibl
     lead,
     symptomList: shuffled(SYMPTOMS, n),
     problems,
-    serviceItems: [
+    serviceItems: shuffled([
       `${node.name} 하수구막힘`,
       `${node.name} 배관공사`,
       `${node.name} 싱크대막힘`,
@@ -198,7 +214,7 @@ export function generateAreaContent(node: RegionNode, parentPath: string[], sibl
       `${node.name} 고압세척`,
       `${node.name} 음식점 하수구막힘`,
       `${node.name} 상가·아파트 배관공사`,
-    ],
+    ], n >> 13),
     steps: [
       "증상 확인",
       "사진 또는 영상 상담",
@@ -211,8 +227,8 @@ export function generateAreaContent(node: RegionNode, parentPath: string[], sibl
       "재발 방지 안내",
     ],
     costFactors: shuffled(COST_FACTORS, n >> 2),
-    costNote: `${node.name} 배관공사 비용은 현장 구조와 막힘 정도를 확인한 뒤 안내됩니다. 단순 막힘인지, 반복 막힘인지, 배관 내부 문제인지에 따라 필요한 장비와 작업 시간이 달라질 수 있습니다. 작업 전에 예상 기준을 안내하고, 추가 작업이 필요하면 진행 전에 다시 설명한 뒤 동의를 받고 진행합니다.`,
-    preparation: `상담이 더 정확하려면 ${node.name}의 막힘 증상과 발생 위치(싱크대·욕실·변기·바닥 등), 건물 형태(아파트·주택·상가·음식점), 물이 내려가는 속도, 냄새 여부를 알려주시면 좋습니다. 가능하면 증상이 보이는 부위 사진 1~3장을 함께 보내주시면 필요한 장비를 더 정확히 판단할 수 있고, 영업장은 작업 가능 시간대와 차량 접근·주차 가능 여부를 미리 알려주시면 출동이 빨라집니다.`,
+    costNote: fill(pick(COSTNOTE_VARIANTS, n >> 9)),
+    preparation: fill(pick(PREP_VARIANTS, n >> 15)),
     faq,
     nearbyLinks: node.level === "sido" ? undefined : nearbyFromSiblings(node, parentPath, siblings),
   };
