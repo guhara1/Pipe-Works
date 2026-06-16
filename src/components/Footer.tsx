@@ -61,6 +61,29 @@ export default function Footer() {
         </div>
 
         <hr className="divider" />
+        <div style={{ marginBottom: 16 }}>
+          <a
+            href={site.adInquiry.telegram}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              padding: "10px 18px",
+              borderRadius: "999px",
+              background: "linear-gradient(135deg, #229ED9, #2f93d8)",
+              color: "#ffffff",
+              fontWeight: 700,
+              fontSize: "0.95rem",
+              boxShadow: "0 6px 18px rgba(34, 158, 217, 0.35)",
+            }}
+            aria-label={`${site.adInquiry.label} 텔레그램으로 연결`}
+          >
+            <span aria-hidden>✈️</span>
+            {site.adInquiry.label} · 텔레그램 상담
+          </a>
+        </div>
         <p className="muted mt-0">
           상호: {site.name} · 서비스 가능 지역: 전국 주요 지역 출동 · 작업 후 배수 테스트 및 A/S 기준 안내
         </p>

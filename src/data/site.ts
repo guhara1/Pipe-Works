@@ -18,6 +18,11 @@ export const site = {
     "싱크대막힘, 변기막힘, 욕실 배수구, 오수관 역류, 배관내시경, 고압세척까지 전국 주요 지역에서 상담 가능한 스피드 배관공사입니다.",
   // 대표 이미지 (og + schema 공통 사용)
   ogImage: "/images/og/speed-pipe-main-service.svg",
+  // 광고·제휴 문의 (텔레그램). 실제 텔레그램 아이디로 교체하세요. 예: https://t.me/your_id
+  adInquiry: {
+    label: "광고문의",
+    telegram: "https://t.me/your_telegram_id",
+  },
   social: {} as Record<string, string>,
 };
 
