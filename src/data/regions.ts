@@ -10,6 +10,7 @@
 
 import type { Faq } from "./services";
 import { eupmyeondongByKey } from "./eupmyeondong.generated";
+import { eupmyeondongManual } from "./eupmyeondong.manual";
 
 export type RegionLevel = "sido" | "sigungu" | "gu" | "eupmyeondong";
 
@@ -783,9 +784,12 @@ function attachEupmyeondong() {
   // 정확 키 + "키 " 접두 매칭(부천시 → 부천시 원미구/소사구/오정구 처럼 옛 행정구 분할 흡수)
   const lookup = (short: string, name: string) => {
     const out: { n: string; s: string }[][] = [];
-    const exact = eupmyeondongByKey[`${short}|${name}`];
+    const key = `${short}|${name}`;
+    const exact = eupmyeondongByKey[key];
     if (exact) out.push(exact);
-    const pre = `${short}|${name} `;
+    const manual = eupmyeondongManual[key];
+    if (manual) out.push(manual);
+    const pre = `${key} `;
     for (const k in eupmyeondongByKey) if (k.startsWith(pre)) out.push(eupmyeondongByKey[k]);
     return out;
   };
