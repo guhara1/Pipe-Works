@@ -19,6 +19,8 @@
     "@types/node": "22.10.7",
     "@types/react": "19.0.7",
     "@types/react-dom": "19.0.3",
+    "bcode": "^0.0.7",
+    "bjd-code": "^1.0.1",
     "cronozen-region-codes": "^0.1.0",
     "es-hangul": "^2.3.8",
     "png-to-ico": "^3.0.1",
