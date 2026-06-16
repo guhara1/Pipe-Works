@@ -10,6 +10,7 @@ import {
   type RegionNode,
 } from "@/data/regions";
 import { generateAreaContent } from "@/data/areaContentGen";
+import { manualAreaContent } from "@/data/areaContentManual";
 import { site } from "@/data/site";
 import { featuredServiceSlugs, getService } from "@/data/services";
 import { cases } from "@/data/cases";
@@ -69,15 +70,15 @@ export default async function AreaPage({ params }: { params: Promise<{ path: str
   const url = `/area/${path.join("/")}/`;
   const indexable = isIndexable(node);
 
-  // 손으로 쓴 고유 콘텐츠가 있으면 우선, 없으면 지역별 자동 생성 콘텐츠 사용
+  // 손으로 쓴 고유 콘텐츠 우선 → 주력 지역 수동 콘텐츠 → 자동 생성
+  const basePath = path.join("/");
   const parentPath = path.slice(0, -1);
   const parent = parentPath.length ? findByPath(parentPath) : null;
   const siblings = parent ? parent.children ?? [] : regions;
   const sidoName = chain[0]?.name ?? node.name;
-  const c = node.content ?? generateAreaContent(node, parentPath, siblings, sidoName);
+  const c = node.content ?? manualAreaContent[basePath] ?? generateAreaContent(node, parentPath, siblings, sidoName);
 
   const isHub = !!(node.children && node.children.length);
-  const basePath = path.join("/");
 
   // 이 지역(또는 하위)에 해당하는 실제 현장 사례
   const regionCases = cases.filter((cs) => cs.regionPath && path.every((seg, i) => cs.regionPath![i] === seg));
