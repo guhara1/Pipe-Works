@@ -21,7 +21,7 @@ export const site = {
   // 광고·제휴 문의 (텔레그램). 실제 텔레그램 아이디로 교체하세요. 예: https://t.me/your_id
   adInquiry: {
     label: "광고문의",
-    telegram: "https://t.me/your_telegram_id",
+    telegram: "https://t.me/googleseolab",
   },
   social: {} as Record<string, string>,
 };
