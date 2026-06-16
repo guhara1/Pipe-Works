@@ -1,0 +1,48 @@
+name: Deploy to Cloudflare Pages
+
+# main 또는 작업 브랜치에 push 시 정적 빌드 후 Cloudflare Pages에 배포한다.
+on:
+  push:
+    branches:
+      - main
+      - "claude/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  deployments: write
+
+concurrency:
+  group: cf-pages-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static site (out/)
+        run: npm run build
+
+      # Cloudflare Pages 배포 (wrangler)
+      # 사전 준비: 저장소 Settings > Secrets and variables > Actions 에
+      #   - CLOUDFLARE_API_TOKEN   (Pages: Edit 권한 토큰)
+      #   - CLOUDFLARE_ACCOUNT_ID  (Cloudflare 계정 ID)
+      # 그리고 아래 projectName 을 실제 Pages 프로젝트명으로 맞춰주세요.
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy out --project-name=pipe-works --branch=${{ github.ref_name }}

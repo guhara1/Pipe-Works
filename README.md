@@ -60,6 +60,36 @@ npm run build    # 정적 export → out/ 디렉터리 생성
 - 사이트맵: `src/app/sitemap.ts` — **indexable 페이지만 포함**.
 - robots: `src/app/robots.ts`.
 
+## 배포 (Cloudflare Pages)
+
+정적 export(`out/`)를 Cloudflare Pages에 배포합니다. 두 가지 방법이 있습니다.
+
+### 방법 A — GitHub Actions 자동 배포 (이 저장소에 설정됨)
+
+`.github/workflows/deploy.yml` 가 `main` 및 `claude/**` 브랜치 push 시 자동으로 빌드·배포합니다.
+사전 준비:
+
+1. Cloudflare 대시보드에서 Pages 프로젝트 생성 (이름: `pipe-works` — 워크플로의 `--project-name` 과 일치시킬 것).
+2. GitHub 저장소 **Settings → Secrets and variables → Actions** 에 시크릿 등록:
+   - `CLOUDFLARE_API_TOKEN` — *Cloudflare Pages: Edit* 권한 토큰
+   - `CLOUDFLARE_ACCOUNT_ID` — Cloudflare 계정 ID
+3. push 하면 빌드 → `wrangler pages deploy out` 으로 배포됩니다.
+
+> 프로젝트명을 바꾸려면 `.github/workflows/deploy.yml` 의 `--project-name=pipe-works` 를 수정하세요.
+
+### 방법 B — Cloudflare 대시보드 Git 연동 (설정 파일 불필요)
+
+Cloudflare Pages → *Connect to Git* 후 빌드 설정:
+
+| 항목 | 값 |
+| --- | --- |
+| Framework preset | None (또는 Next.js Static HTML Export) |
+| Build command | `npm run build` |
+| Build output directory | `out` |
+| Node version | 22 (환경변수 `NODE_VERSION=22`) |
+
+`public/_headers` 가 캐시·보안 헤더를 적용합니다(빌드 시 `out/` 루트로 복사됨).
+
 ## 배포 전 교체할 항목
 
 `src/data/site.ts` 의 `url`(도메인), `phone`(대표 전화)을 실제 값으로 교체하세요.
