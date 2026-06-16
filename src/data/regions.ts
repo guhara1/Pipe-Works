@@ -9,6 +9,7 @@
 // 새 지역을 추가하려면 이 트리에 노드를 추가하면 된다(페이지·사이트맵 자동 반영).
 
 import type { Faq } from "./services";
+import { eupmyeondongByKey } from "./eupmyeondong.generated";
 
 export type RegionLevel = "sido" | "sigungu" | "gu" | "eupmyeondong";
 
@@ -760,6 +761,42 @@ export const regions: RegionNode[] = [
     ],
   },
 ];
+
+// ---- 전국 읍·면·동 자동 부착 -------------------------------------------
+// 자동 생성된 법정동 목록을 각 시·군·구/행정구 노드에 children 으로 붙인다.
+// 손으로 작성한 기존 동(예: 강남구 역삼동)은 이름/슬러그로 보존하고 누락분만 추가.
+function attachEupmyeondong() {
+  const merge = (node: RegionNode, key: string) => {
+    const list = eupmyeondongByKey[key];
+    if (!list) return;
+    const existing = node.children ?? [];
+    const slugs = new Set(existing.map((c) => c.slug));
+    const names = new Set(existing.map((c) => c.name));
+    for (const { n, s } of list) {
+      if (slugs.has(s) || names.has(n)) continue;
+      existing.push({ slug: s, name: n, level: "eupmyeondong" });
+      slugs.add(s);
+      names.add(n);
+    }
+    node.children = existing;
+  };
+  for (const sido of regions) {
+    const short = sido.shortName ?? sido.name;
+    if (sido.slug === "sejong") {
+      merge(sido, `${short}|세종시`);
+      continue;
+    }
+    for (const sg of sido.children ?? []) {
+      const gus = (sg.children ?? []).filter((c) => c.level === "gu");
+      if (gus.length) {
+        for (const gu of gus) merge(gu, `${short}|${sg.name} ${gu.name}`);
+      } else {
+        merge(sg, `${short}|${sg.name}`);
+      }
+    }
+  }
+}
+attachEupmyeondong();
 
 // ---- 트리 탐색 유틸 ----------------------------------------------------
 
