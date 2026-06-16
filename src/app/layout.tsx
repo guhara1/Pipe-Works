@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -24,6 +24,10 @@ export const metadata: Metadata = {
     locale: "ko_KR",
   },
   robots: { index: true, follow: true },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#0a1424",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

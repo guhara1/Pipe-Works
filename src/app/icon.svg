@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff6a13"/>
+      <stop offset="1" stop-color="#2f93d8"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#g)"/>
+  <!-- 배관 엘보(ㄱ자 관) -->
+  <path d="M23 15 L23 35 Q23 41 29 41 L49 41"
+        fill="none" stroke="#ffffff" stroke-width="9"
+        stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- 관 끝 플랜지 -->
+  <rect x="15" y="11" width="16" height="6" rx="2" fill="#ffffff"/>
+  <rect x="47" y="33" width="6" height="16" rx="2" fill="#ffffff"/>
+</svg>
