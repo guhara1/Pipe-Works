@@ -21,6 +21,16 @@ const SHORT = {
 
 const SUF = { 동: "dong", 읍: "eup", 면: "myeon", 가: "ga", 리: "ri" };
 const rom = (s) => romanize(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+
+// 1동·2동·3동, 1가·2가 등 번호 분할을 대표동으로 통합
+//   역삼1동→역삼동, 명륜1가→명륜동, 장충동1가→장충동, 종로1가→종로동
+function repName(name) {
+  const m = name.match(/^(.*?)(\d+)(가|동|로|길)?$/);
+  if (!m) return name;
+  const base = m[1];
+  if (/[동읍면리가]$/.test(base)) return base; // 장충동1가 → 장충동
+  return base + "동"; // 명륜1가 → 명륜동, 역삼1동 → 역삼동
+}
 function slugify(name) {
   const last = name[name.length - 1];
   if (SUF[last]) return (rom(name.slice(0, -1)) || "x") + "-" + SUF[last];
@@ -33,7 +43,7 @@ for (const d of LEGAL_DONGS) {
   if (!d.isActive || !d.umd || !d.sigungu) continue;
   const short = SHORT[d.sido] || d.sido;
   const key = `${short}|${d.sigungu}`;
-  (groups[key] = groups[key] || new Set()).add(d.umd);
+  (groups[key] = groups[key] || new Set()).add(repName(d.umd));
 }
 
 const out = {};

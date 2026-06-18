@@ -4,9 +4,9 @@ export const site = {
   shortName: "스피드 배관공사",
   // 실제 배포 도메인으로 교체하세요.
   url: "https://www.speed-pipe.co.kr",
-  // 실제 대표 전화번호로 교체하세요. (조작된 지점별 번호 금지 — 가이드라인 준수)
-  phone: "1500-0000",
-  phoneHref: "tel:1500-0000",
+  // 제휴 전 임시 placeholder. 실제 대표 전화번호로 교체하세요.
+  phone: "0000",
+  phoneHref: "tel:0000",
   hours: "연중무휴 08:00 ~ 22:00 (야간·심야 별도 출동)",
   emergency: "24시간 긴급출동 (야간·주말·공휴일)",
   // 실제 사업장 주소가 있을 때만 정확히 기입 (없는 지점 마크업 금지)

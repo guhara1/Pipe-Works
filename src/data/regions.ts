@@ -808,6 +808,18 @@ function attachEupmyeondong() {
 }
 attachEupmyeondong();
 
+// ---- 가나다(한글) 순 정렬 ----------------------------------------------
+// 모든 지역 목록을 한글 가나다순으로 정렬한다(시·도는 short명, 그 외는 name 기준).
+function sortTreeKo(nodes: RegionNode[], useShort: boolean) {
+  nodes.sort((a, b) => {
+    const ka = (useShort && a.shortName) || a.name;
+    const kb = (useShort && b.shortName) || b.name;
+    return ka.localeCompare(kb, "ko");
+  });
+  for (const n of nodes) if (n.children) sortTreeKo(n.children, false);
+}
+sortTreeKo(regions, true);
+
 // ---- 트리 탐색 유틸 ----------------------------------------------------
 
 export function findByPath(path: string[]): RegionNode | undefined {
