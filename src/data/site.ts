@@ -24,6 +24,8 @@ export const site = {
     telegram: "https://t.me/googleseolab",
   },
   social: {} as Record<string, string>,
+  // IndexNow 키 (빙·네이버 즉시 색인 통보). public/<key>.txt 와 동일해야 함.
+  indexNowKey: "1d1eb2631f48b9d45e8234984d26adf9",
 };
 
 export type Site = typeof site;
