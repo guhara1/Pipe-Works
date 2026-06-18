@@ -25,6 +25,11 @@ export const metadata: Metadata = {
     locale: "ko_KR",
   },
   robots: { index: true, follow: true },
+  verification: {
+    other: {
+      "naver-site-verification": "69afda51edc3412e484ee092fa071613ca69027c",
+    },
+  },
 };
 
 export const viewport: Viewport = {
