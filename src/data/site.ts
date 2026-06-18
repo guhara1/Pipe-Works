@@ -2,8 +2,8 @@
 export const site = {
   name: "스피드 배관공사",
   shortName: "스피드 배관공사",
-  // 실제 배포 도메인으로 교체하세요.
-  url: "https://www.speed-pipe.co.kr",
+  // 실제 배포 도메인. 커스텀 도메인 연결 시 이 값만 교체하세요.
+  url: "https://pipe-works.pages.dev",
   // 제휴 전 임시 placeholder. 실제 대표 전화번호로 교체하세요.
   phone: "0000",
   phoneHref: "tel:0000",
